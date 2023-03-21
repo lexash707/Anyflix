@@ -1,0 +1,53 @@
+package com.lex.netflixserije.models;
+
+import java.io.Serializable;
+import java.lang.String;
+import java.util.List;
+
+import jakarta.persistence.*;
+
+/**
+ * Entity implementation class for Entity: Zanr
+ *
+ */
+@Entity
+
+public class Zanr implements Serializable {
+
+	@Id
+	private int idZanr;
+	private String naziv;
+	private static final long serialVersionUID = 1L;
+
+	@ManyToMany(mappedBy = "zanrovi")
+	private List<Serija> serije;
+
+	public Zanr() {
+		super();
+	}
+
+	public List<Serija> getSerije() {
+		return serije;
+	}
+
+	public void setSerije(List<Serija> serije) {
+		this.serije = serije;
+	}
+
+	public int getIdZanr() {
+		return this.idZanr;
+	}
+
+	public void setIdZanr(int idZanr) {
+		this.idZanr = idZanr;
+	}
+
+	public String getNaziv() {
+		return this.naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+}

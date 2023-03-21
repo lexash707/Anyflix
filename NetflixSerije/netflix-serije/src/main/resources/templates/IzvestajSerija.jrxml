@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="26e04ecf-d3d2-43d9-9cb6-82d566032308">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <subDataset name="Dataset1" uuid="8f1f29e1-b581-4ed0-8625-e386601a9d5d">
+        <queryString>
+            <![CDATA[]]>
+        </queryString>
+    </subDataset>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <field name="naziv" class="java.lang.String"/>
+    <field name="brKomentara" class="java.lang.Integer"/>
+    <field name="prosecnaOcena" class="java.lang.Float"/>
+    <field name="brUOmiljenim" class="java.lang.Integer"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="32" splitType="Stretch">
+            <staticText>
+                <reportElement x="110" y="0" width="332" height="30" uuid="36557a5a-40dc-452e-a2c3-7fac3e79aa5b"/>
+                <textElement textAlignment="Center">
+                    <font size="14"/>
+                </textElement>
+                <text><![CDATA[Izveštaj popularnosti serije]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="22" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="68" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="10" width="100" height="30" uuid="d1660a4d-e228-4804-a63f-83190834d720"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Naziv Serije]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="160" y="10" width="100" height="30" uuid="dc1d3a15-0ace-4728-be1d-a6ef4593a118"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Prosečna ocena]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="310" y="10" width="100" height="30" uuid="59311850-f1e0-45e9-b24c-0573565346b0"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Broj Komentara]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="450" y="10" width="100" height="30" uuid="42cc976d-93ec-43e8-9129-9723bf87af23"/>
+                <textElement>
+                    <font size="12"/>
+                </textElement>
+                <text><![CDATA[Dodata u omiljene]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="73" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="20" width="100" height="30" uuid="3ad96973-d6a8-4aa8-8484-d8bf744c4c56"/>
+                <textFieldExpression><![CDATA[$F{naziv}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="160" y="20" width="100" height="30" uuid="694e5be2-80cc-46c5-95e8-46605ae180c5"/>
+                <textFieldExpression><![CDATA[$F{prosecnaOcena}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="320" y="20" width="100" height="30" uuid="177e2666-7b77-4a60-83a4-0a55699079d5"/>
+                <textFieldExpression><![CDATA[$F{brKomentara}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="460" y="20" width="100" height="30" uuid="8dcc922a-b1c1-4297-80b5-310568b89bd2"/>
+                <textFieldExpression><![CDATA[$F{brUOmiljenim}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

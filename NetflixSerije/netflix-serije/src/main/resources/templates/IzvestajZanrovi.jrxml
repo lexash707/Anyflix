@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="26e04ecf-d3d2-43d9-9cb6-82d566032308">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+    <queryString>
+        <![CDATA[]]>
+    </queryString>
+    <field name="nazivZanra" class="java.lang.String"/>
+    <field name="prosecnaOcena" class="java.lang.Float"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="47" splitType="Stretch">
+            <staticText>
+                <reportElement x="134" y="0" width="287" height="30" uuid="4c077729-5146-4aa8-a178-562cbfea63bd"/>
+                <textElement textAlignment="Center">
+                    <font size="22"/>
+                </textElement>
+                <text><![CDATA[Izveštaj popularnosti žanrova
+]]></text>
+            </staticText>
+        </band>
+    </title>
+    <pageHeader>
+        <band height="65" splitType="Stretch"/>
+    </pageHeader>
+    <columnHeader>
+        <band height="67" splitType="Stretch">
+            <staticText>
+                <reportElement x="180" y="0" width="100" height="30" uuid="5bd1d11d-ad1b-42f7-b5ae-a4622ad83b26"/>
+                <textElement>
+                    <font size="14"/>
+                </textElement>
+                <text><![CDATA[Naziv Žanra]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="280" y="0" width="100" height="30" uuid="b0fbf475-764a-47df-b5d6-f5adb70fe33a"/>
+                <textElement textAlignment="Right">
+                    <font size="14"/>
+                </textElement>
+                <text><![CDATA[Ocena]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="42" splitType="Stretch">
+            <textField>
+                <reportElement x="180" y="10" width="100" height="20" uuid="e0ed9864-f2b8-455c-8a21-9f0d0784dbe8"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{nazivZanra}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="280" y="10" width="100" height="20" uuid="d8c25e19-b1e8-454d-ba8d-0626567decbc"/>
+                <textElement textAlignment="Center">
+                    <font size="12"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{prosecnaOcena}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+    <columnFooter>
+        <band height="45" splitType="Stretch"/>
+    </columnFooter>
+    <pageFooter>
+        <band height="54" splitType="Stretch"/>
+    </pageFooter>
+    <summary>
+        <band height="42" splitType="Stretch"/>
+    </summary>
+</jasperReport>

@@ -1,0 +1,22 @@
+package com.lex.netflixserije.controllers;
+
+import java.util.List;
+
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lex.netflixserije.models.Korisnik;
+import com.lex.netflixserije.repository.KorisnikRepository;
+
+@RestController
+@RequestMapping(path="/korisnici")
+public class KorisnikController {
+    @Autowired
+    private KorisnikRepository testKorisnikRepository;
+
+    @GetMapping("/test")
+    public List<Korisnik> getAll(){
+        return testKorisnikRepository.findAll();
+//        new TestModel().get
+    }
+}

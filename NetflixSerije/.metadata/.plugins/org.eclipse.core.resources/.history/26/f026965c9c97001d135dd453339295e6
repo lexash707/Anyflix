@@ -1,0 +1,94 @@
+package model;
+
+import java.io.Serializable;
+import java.lang.String;
+import java.util.List;
+
+import javax.persistence.*;
+
+/**
+ * Entity implementation class for Entity: Serija
+ *
+ */
+@Entity
+
+public class Serija implements Serializable {
+
+	@Id
+	private int idSerije;
+	private String naziv;
+	private String sinopsis;
+	private String slika;
+	private static final long serialVersionUID = 1L;
+
+	@OneToMany
+	private List<Ocena> ocene;
+
+	@ManyToMany(mappedBy = "omiljene")
+	private List<Korisnik> korisnici;
+
+	@ManyToMany
+	@JoinTable(name = "zanr_serije", joinColumns = @JoinColumn(name = "idZanr"), inverseJoinColumns = @JoinColumn(name = "idSerije"))
+	private List<Zanr> zanrovi;
+
+	public Serija() {
+		super();
+	}
+
+	public List<Ocena> getOcene() {
+		return ocene;
+	}
+
+	public void setOcene(List<Ocena> ocene) {
+		this.ocene = ocene;
+	}
+
+	public List<Korisnik> getKorisnici() {
+		return korisnici;
+	}
+
+	public void setKorisnici(List<Korisnik> korisnici) {
+		this.korisnici = korisnici;
+	}
+
+	public List<Zanr> getZanrovi() {
+		return zanrovi;
+	}
+
+	public void setZanrovi(List<Zanr> zanrovi) {
+		this.zanrovi = zanrovi;
+	}
+
+	public int getIdSerije() {
+		return this.idSerije;
+	};
+
+	public void setIdSerije(int idSerije) {
+		this.idSerije = idSerije;
+	}
+
+	public String getNaziv() {
+		return this.naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+	public String getSinopsis() {
+		return this.sinopsis;
+	}
+
+	public void setSinopsis(String sinopsis) {
+		this.sinopsis = sinopsis;
+	}
+
+	public String getSlika() {
+		return this.slika;
+	}
+
+	public void setSlika(String slika) {
+		this.slika = slika;
+	}
+
+}

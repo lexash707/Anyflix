@@ -1,0 +1,62 @@
+package model;
+
+import java.io.Serializable;
+import javax.persistence.*;
+
+/**
+ * Entity implementation class for Entity: Ocena
+ *
+ */
+@Entity
+
+public class Ocena implements Serializable {
+
+	@Id
+	private int idOcene;
+	private int ocena;
+	private static final long serialVersionUID = 1L;
+	@ManyToOne
+	@JoinColumn(name = "idKorisnika")
+	private Korisnik korisnik;
+
+	@ManyToOne
+	@JoinColumn(name = "idSerije")
+	private Serija serija;
+
+	public Ocena() {
+		super();
+	}
+
+	public Serija getSerija() {
+		return serija;
+	}
+
+	public void setSerija(Serija serija) {
+		this.serija = serija;
+	}
+
+	public Korisnik getKorisnik() {
+		return korisnik;
+	}
+
+	public void setKorisnik(Korisnik korisnik) {
+		this.korisnik = korisnik;
+	}
+
+	public int getIdOcene() {
+		return this.idOcene;
+	}
+
+	public void setIdOcene(int idOcene) {
+		this.idOcene = idOcene;
+	}
+
+	public int getOcena() {
+		return this.ocena;
+	}
+
+	public void setOcena(int ocena) {
+		this.ocena = ocena;
+	}
+
+}
