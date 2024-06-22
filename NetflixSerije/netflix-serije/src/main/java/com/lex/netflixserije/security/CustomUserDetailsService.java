@@ -2,6 +2,7 @@ package com.lex.netflixserije.security;
 
 import com.lex.netflixserije.models.Korisnik;
 import com.lex.netflixserije.repository.KorisnikRepository;
+import com.lex.netflixserije.services.KorisnikService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,24 +14,13 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService{
     @Autowired
     private KorisnikRepository kr;
+
+	@Autowired
+	private KorisnikService ks;
+
     @Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Korisnik user = kr.findKorisnikByUsername(username).orElseThrow(RuntimeException::new);
-		UserDetailsImpl userDetails =new UserDetailsImpl();
-		userDetails.setUsername(user.getUsername());
-		userDetails.setPassword(user.getPassword());
-		userDetails.setRoles(user.getTipkorisnika());
-
-		System.out.println(userDetails);
-		System.out.println(user);
-		return userDetails;
+		return UserDetailsImpl.builder().user(ks.nadjiKorisnika(username)).build();
 		
     }
- 
-     
- 
-
-
-	
-     
 }

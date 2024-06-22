@@ -49,7 +49,7 @@ public class SerijaController {
         return ss.getSve();
     }
 
-@RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseEntity<HttpServletResponse> saveSerija(Serija s, Errors e, Model m, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         try {
             ss.sacuvajSeriju(s, multipartFile);
@@ -82,11 +82,11 @@ public class SerijaController {
         os.sacuvajOcenu(o);
         return new ModelAndView("redirect:details/" + serija.getIdSerije());
     }
-
+    @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value="/report", method = RequestMethod.POST)
-    public void napraviIzvestaj(HttpServletResponse response, @RequestParam("selektovaneSerije") List<Integer> selektovane) throws Exception{
+    public void napraviIzvestaj(HttpServletResponse response, @RequestParam(value = "selektovaneSerije", required = false) List<Integer> selektovane) throws Exception{
         JasperPrint jasperPrint = ss.izvestaj(selektovane);
-        response.setContentType("application/x-download");
+        response.setContentType("application/pdf");
         response.addHeader("Content-disposition", "attachment; filename=Serije.pdf");
         OutputStream out = response.getOutputStream();
         JasperExportManager.exportReportToPdfStream(jasperPrint,out);

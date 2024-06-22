@@ -5,37 +5,37 @@ import java.util.Collection;
 
 import com.lex.netflixserije.models.Korisnik;
 import com.lex.netflixserije.models.TipKorisnika;
+import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
+@Builder
+@ToString
 public class UserDetailsImpl implements UserDetails {
-
-	
 	 /**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String username;
-	 private String password;
-	 private TipKorisnika tipKorisnika;
+	 private Korisnik user;
 
 	 @Override
 	 public Collection<SimpleGrantedAuthority> getAuthorities() {
 	    Collection<SimpleGrantedAuthority> authorities = new ArrayList<SimpleGrantedAuthority>();
-		authorities.add(new SimpleGrantedAuthority("ROLE_"+ tipKorisnika.getNaziv()));
+		authorities.add(new SimpleGrantedAuthority("ROLE_"+ user.getTipkorisnika().getNaziv()));
 	    return authorities;
 	}
 
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return password;
+		return user.getPassword();
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return username;
+		return user.getUsername();
 	}
 
 	@Override
@@ -64,27 +64,19 @@ public class UserDetailsImpl implements UserDetails {
 
 
 	public void setUsername(String username) {
-		this.username = username;
+		this.user.setUsername(username);
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.user.setPassword(password);
 	}
 
 	public TipKorisnika getRoles() {
-		return tipKorisnika;
+		return user.getTipkorisnika();
 	}
 
 	public void setRoles(TipKorisnika tk) {
-		this.tipKorisnika = tk;
+		this.user.setTipkorisnika(tk);
 	}
 
-	@Override
-	public String toString() {
-		return "UserDetailsImpl{" +
-				"username='" + username + '\'' +
-				", password='" + password + '\'' +
-				", tipKorisnika=" + tipKorisnika +
-				'}';
-	}
 }

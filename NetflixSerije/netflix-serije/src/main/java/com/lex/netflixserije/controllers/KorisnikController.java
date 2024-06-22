@@ -2,11 +2,16 @@ package com.lex.netflixserije.controllers;
 
 import java.util.List;
 
+import com.lex.netflixserije.dto.LoginRequest;
+import com.lex.netflixserije.dto.LoginResponse;
+import com.lex.netflixserije.security.CustomUserDetailsService;
 import com.lex.netflixserije.security.UserDetailsImpl;
 import com.lex.netflixserije.services.KorisnikService;
 import com.lex.netflixserije.services.SerijaService;
+import com.lex.netflixserije.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +29,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import static org.springframework.security.web.context.HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY;
 
-@Controller
+@RestController
+@RequiredArgsConstructor
 @RequestMapping(path="/korisnici")
 public class KorisnikController {
 
@@ -37,6 +43,12 @@ public class KorisnikController {
     @Autowired
     private AuthenticationManager authManager;
 
+    private final CustomUserDetailsService userDetailsService;
+
+    private final JwtUtil jwtUtil;
+    private final AuthenticationManager authenticationManager;
+    private final KorisnikService userService;
+
     @GetMapping("/test")
     public List<Korisnik> getAll(){
         return ks.getSve();
@@ -44,31 +56,15 @@ public class KorisnikController {
 
 
 
-    @PostMapping(path = "/login")
-    public ModelAndView login(ModelMap model, HttpServletRequest request, RedirectAttributes ra, @RequestParam(name="username") String username, @RequestParam(name="password") String password){
-        Authentication auth = null;
-
-        try {
-            UsernamePasswordAuthenticationToken authReq = new UsernamePasswordAuthenticationToken(username, password);
-            auth = authManager.authenticate(authReq);
-        }
-        catch(RuntimeException e){
-            ra.addFlashAttribute("fail", true);
-            return new ModelAndView("redirect:/login");
-        }
-
-        SecurityContext sc = SecurityContextHolder.getContext();
-        sc.setAuthentication(auth);
-
-        String un = ((UserDetailsImpl) sc.getAuthentication().getPrincipal()).getUsername();
-
-        Korisnik korisnik = ks.nadjiKorisnika(un);
-        request.getSession().setAttribute("korisnik", korisnik);
-
-        HttpSession session = request.getSession(true);
-        session.setAttribute(SPRING_SECURITY_CONTEXT_KEY, sc);
-
-        return new ModelAndView("redirect:/", model);
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest loginRequest){
+        authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
+        System.out.println("brrrrrrrrrrrr");
+        UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        System.out.println("aaaaaaaaaaaaaaaaaaa");
+        Korisnik user = ks.nadjiKorisnika(userDetails.getUsername());
+        System.out.println(user.getUsername() + user.getPassword() + user.getTipkorisnika() + "||||" + user);
+        return LoginResponse.builder().token(jwtUtil.generateToken(userDetails)).user(user).build();
     }
 
     @RequestMapping(value = "/dodajKorisnika", method = RequestMethod.POST)

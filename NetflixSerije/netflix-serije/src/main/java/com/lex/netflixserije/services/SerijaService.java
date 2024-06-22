@@ -61,6 +61,10 @@ public class SerijaService {
     }
 
     public JasperPrint izvestaj(List<Integer> ids){
+        if (ids == null){
+            ids = sr.getIds();
+        }
+
         List<SerijaPopularnost> popularnostList = sr.findSerijasByIdSerijeIn(ids).stream().map(Serija::popularnost).toList();
 
         JRBeanCollectionDataSource dataSource = new JRBeanCollectionDataSource(popularnostList);

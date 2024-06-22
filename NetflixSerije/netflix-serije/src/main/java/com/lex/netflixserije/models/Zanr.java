@@ -13,7 +13,6 @@ import jakarta.persistence.*;
  *
  */
 @Entity
-
 public class Zanr implements Serializable {
 
 	@Id
