@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 /**
@@ -25,10 +26,12 @@ public class Korisnik implements Serializable {
 	private TipKorisnika tipkorisnika;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.REFRESH})
+	@JsonBackReference
 	@JoinTable(name = "omiljene_serije", joinColumns = @JoinColumn(name = "idSerije"), inverseJoinColumns = @JoinColumn(name = "idKorisnika"))
 	private List<Serija> omiljene;
 
 	@OneToMany
+	@JsonBackReference
 	private List<Ocena> ocene;
 
 	public Korisnik() {

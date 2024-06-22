@@ -13,6 +13,9 @@ import jakarta.validation.ValidationException;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -27,8 +30,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.List;
 
-@Controller
-@RequestMapping(value = "/serije")
+@RestController
+@RequestMapping(value = "/series")
 public class SerijaController {
 
     @Autowired
@@ -40,25 +43,21 @@ public class SerijaController {
     @Autowired
     private OcenaService os;
 
-    @GetMapping("/sveSerije")
-    public ModelAndView getSve(ModelMap model){
-        model.addAttribute("serije", ss.getSve());
-        return new ModelAndView("index");
+    @GetMapping("/all")
+    @CrossOrigin(origins = "http://localhost:4200")
+    public List<Serija> getSve(){
+        return ss.getSve();
     }
 
-@RequestMapping(value = "/dodajSeriju", method = RequestMethod.POST)
-    public ModelAndView saveSerija(Serija s, Errors e, Model m, @RequestParam("image") MultipartFile multipartFile, RedirectAttributes ra) throws IOException {
-        if(e.hasErrors())
-            return new ModelAndView("redirect:/greska");
-
+@RequestMapping(value = "/add", method = RequestMethod.POST)
+    public ResponseEntity<HttpServletResponse> saveSerija(Serija s, Errors e, Model m, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         try {
             ss.sacuvajSeriju(s, multipartFile);
-            m.addAttribute("poruka", "Serija uspesno dodata");
-            return new ModelAndView("redirect:/");
         }catch (ValidationException ve){
-            ra.addFlashAttribute("poruka", "Mora se uneti zanr pri dodavanju nove serije");
-            return new ModelAndView("redirect:/novaSerija");
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/details/{id}")
@@ -84,7 +83,7 @@ public class SerijaController {
         return new ModelAndView("redirect:details/" + serija.getIdSerije());
     }
 
-    @RequestMapping(value="izvestajSerija", method = RequestMethod.POST)
+    @RequestMapping(value="/report", method = RequestMethod.POST)
     public void napraviIzvestaj(HttpServletResponse response, @RequestParam("selektovaneSerije") List<Integer> selektovane) throws Exception{
         JasperPrint jasperPrint = ss.izvestaj(selektovane);
         response.setContentType("application/x-download");

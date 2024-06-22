@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lex.netflixserije.report.SerijaPopularnost;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
@@ -25,13 +27,16 @@ public class Serija implements Serializable {
 	private String slika;
 	private static final long serialVersionUID = 1L;
 
-	@OneToMany(mappedBy = "serija")
+	@OneToMany(mappedBy = "serija", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Ocena> ocene;
 
-	@ManyToMany(mappedBy = "omiljene")
+	@ManyToMany(mappedBy = "omiljene", fetch = FetchType.LAZY)
+	@JsonManagedReference
 	private List<Korisnik> korisnici;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JsonBackReference
 	@NotNull
 	@NotEmpty
 	@JoinTable(name = "zanr_serije", joinColumns = @JoinColumn(name = "idZanr"), inverseJoinColumns = @JoinColumn(name = "idSerije"))

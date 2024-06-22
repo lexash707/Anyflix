@@ -1,6 +1,8 @@
 package com.lex.netflixserije.models;
 
 import java.io.Serializable;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,6 +30,7 @@ public class Ocena implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "idSerije")
+	@JsonBackReference
 	private Serija serija;
 
 	public String getKomentar() {

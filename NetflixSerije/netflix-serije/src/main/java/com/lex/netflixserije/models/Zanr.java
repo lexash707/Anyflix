@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lex.netflixserije.report.ZanrPopularnost;
 import jakarta.persistence.*;
 
@@ -22,6 +23,7 @@ public class Zanr implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@ManyToMany(mappedBy = "zanrovi")
+	@JsonManagedReference
 	private List<Serija> serije;
 
 	public Zanr() {
