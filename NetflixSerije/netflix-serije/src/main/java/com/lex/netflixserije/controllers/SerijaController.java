@@ -1,5 +1,7 @@
 package com.lex.netflixserije.controllers;
 
+import com.lex.netflixserije.dto.DetailsResponse;
+import com.lex.netflixserije.dto.ReviewRequest;
 import com.lex.netflixserije.models.Korisnik;
 import com.lex.netflixserije.models.Ocena;
 import com.lex.netflixserije.models.Serija;
@@ -7,6 +9,7 @@ import com.lex.netflixserije.repository.SerijaRepository;
 import com.lex.netflixserije.services.KorisnikService;
 import com.lex.netflixserije.services.OcenaService;
 import com.lex.netflixserije.services.SerijaService;
+import com.lex.netflixserije.utils.JwtUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.ValidationException;
@@ -43,6 +46,12 @@ public class SerijaController {
     @Autowired
     private OcenaService os;
 
+    @Autowired
+    private JwtUtil ju;
+
+    @Autowired
+    private SerijaRepository sr;
+
     @GetMapping("/all")
     @CrossOrigin(origins = "http://localhost:4200")
     public List<Serija> getSve(){
@@ -50,7 +59,7 @@ public class SerijaController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    public ResponseEntity<HttpServletResponse> saveSerija(Serija s, Errors e, Model m, @RequestParam("image") MultipartFile multipartFile) throws IOException {
+    public ResponseEntity<HttpServletResponse> saveSerija(Serija s, @RequestParam("image") MultipartFile multipartFile) throws IOException {
         try {
             ss.sacuvajSeriju(s, multipartFile);
         }catch (ValidationException ve){
@@ -61,13 +70,10 @@ public class SerijaController {
     }
 
     @RequestMapping(value = "/details/{id}")
-    public ModelAndView detalji(@PathVariable int id, ModelMap model){
+    public DetailsResponse detalji(@PathVariable int id){
         Serija s = ss.getId(id);
         List<Ocena> ocene = s.getOcene();
-        System.out.println(ocene);
-        model.addAttribute("s", s);
-        model.addAttribute("ocene", ocene);
-        return new ModelAndView("details");
+        return new DetailsResponse(s, ocene);
     }
 
     @RequestMapping(value = "dodajOmiljenu", method = RequestMethod.POST)
@@ -76,11 +82,17 @@ public class SerijaController {
         return new ModelAndView("redirect:details/" + s.getIdSerije());
     }
 
-    @RequestMapping(value = "/oceniSeriju", method = RequestMethod.POST)
-    public ModelAndView oceniSeriju(@RequestParam(name = "korisnik") Korisnik k, @RequestParam(name = "ocena") int ocena, @RequestParam(name = "komentar") String komentar, @RequestParam(name= "serija") Serija serija){
-        Ocena o = Ocena.builder().korisnik(k).ocena(ocena).komentar(komentar).serija(serija).build();
+    @RequestMapping(value = "/review", method = RequestMethod.POST)
+    public ResponseEntity<HttpServletResponse> oceniSeriju(HttpServletRequest request, @RequestBody ReviewRequest reviewRequest){
+        String username = ju.extractUsername(ju.getToken(request).orElse(""));
+        Ocena o = Ocena.builder()
+                .korisnik(ks.nadjiKorisnika(username))
+                .ocena(reviewRequest.ocena)
+                .komentar(reviewRequest.komentar)
+                .serija(sr.findById(reviewRequest.serija).orElseThrow())
+                .build();
         os.sacuvajOcenu(o);
-        return new ModelAndView("redirect:details/" + serija.getIdSerije());
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
     @CrossOrigin(origins = "http://localhost:4200")
     @RequestMapping(value="/report", method = RequestMethod.POST)

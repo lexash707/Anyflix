@@ -5,6 +5,7 @@ import java.lang.String;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.lex.netflixserije.report.SerijaPopularnost;
 import jakarta.persistence.*;
@@ -16,7 +17,7 @@ import jakarta.validation.constraints.NotNull;
  *
  */
 @Entity
-
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Serija implements Serializable {
 
 	@Id

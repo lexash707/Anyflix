@@ -31,7 +31,7 @@ import static org.springframework.security.web.context.HttpSessionSecurityContex
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(path="/korisnici")
+@RequestMapping(path="/user")
 public class KorisnikController {
 
     @Autowired
@@ -59,11 +59,8 @@ public class KorisnikController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest){
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(),loginRequest.getPassword()));
-        System.out.println("brrrrrrrrrrrr");
         UserDetailsImpl userDetails = (UserDetailsImpl) userDetailsService.loadUserByUsername(loginRequest.getUsername());
-        System.out.println("aaaaaaaaaaaaaaaaaaa");
         Korisnik user = ks.nadjiKorisnika(userDetails.getUsername());
-        System.out.println(user.getUsername() + user.getPassword() + user.getTipkorisnika() + "||||" + user);
         return LoginResponse.builder().token(jwtUtil.generateToken(userDetails)).user(user).build();
     }
 
