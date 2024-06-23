@@ -1,22 +1,39 @@
 package com.lex.netflixserije.models;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.String;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonDeserializer;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.lex.netflixserije.report.SerijaPopularnost;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.context.annotation.Bean;
 
 /**
  * Entity implementation class for Entity: Serija
  *
  */
 @Entity
+@ToString
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Serija implements Serializable {
 
@@ -42,10 +59,6 @@ public class Serija implements Serializable {
 	@NotEmpty
 	@JoinTable(name = "zanr_serije", joinColumns = @JoinColumn(name = "idZanr"), inverseJoinColumns = @JoinColumn(name = "idSerije"))
 	private List<Zanr> zanrovi;
-
-	public Serija() {
-		super();
-	}
 
 	public List<Ocena> getOcene() {
 		return ocene;
@@ -73,7 +86,9 @@ public class Serija implements Serializable {
 
 	public int getIdSerije() {
 		return this.idSerije;
-	};
+	}
+
+	;
 
 	public void setIdSerije(int idSerije) {
 		this.idSerije = idSerije;
@@ -103,17 +118,23 @@ public class Serija implements Serializable {
 		this.slika = slika;
 	}
 
-	public SerijaPopularnost popularnost(){
+	public SerijaPopularnost popularnost() {
 		int brKomentara = ocene.stream().filter(ocena -> (ocena.getKomentar() != null)).toList().size();
-		float prosecnaOcena = ocene.stream().filter(ocena -> (ocena.getOcena() != 0)).reduce((float) 0, (aFloat, ocena) -> (aFloat + (float) ocena.getOcena()), Float::sum)/ocene.stream().filter(ocena -> (ocena.getOcena() != 0)).count();
+		float prosecnaOcena = ocene.stream().filter(ocena -> (ocena.getOcena() != 0)).reduce((float) 0, (aFloat, ocena) -> (aFloat + (float) ocena.getOcena()), Float::sum) / ocene.stream().filter(ocena -> (ocena.getOcena() != 0)).count();
 		return SerijaPopularnost.builder().brKomentara(brKomentara).brUOmiljenim(korisnici.size()).naziv(this.naziv).prosecnaOcena(prosecnaOcena).build();
 	}
 
+}
+
+@AllArgsConstructor
+class ZanroviDeserializer extends JsonDeserializer<List<Integer>> {
 	@Override
-	public String toString() {
-		return "Serija{" +
-				"idSerije=" + idSerije +
-				", naziv='" + naziv + '\'' +
-				'}';
+	public List<Integer> deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		String text = p.getText();
+		return Arrays.asList(text.replace("[", "").replace("]", "").split(","))
+				.stream()
+				.map(Integer::parseInt)
+				.collect(Collectors.toList());
 	}
+
 }
